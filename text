@@ -1,0 +1,35 @@
+if(user_email && user_password)
+    {
+        query=`
+            select * from login.info
+            where user_email = "${user_email}";
+        `
+        mysql.query(query,(func,data)=>{
+            if(data.length > 0)
+            {
+                for(var count=0;count<data.length;count++)
+                {
+                    if(data[count].user_password == user_password)
+                    {
+                        request.session.user_id=data[count].user_id;
+                        response.redirect("/")
+                    }
+                    else
+                    {
+                        response.send("INCORRECT PASSWORD")
+                    }
+                }
+
+            }
+            else
+            {
+                response.send("INCOORECT EMAIL")
+            }
+            response.end()
+        })
+    }
+    else
+    {
+        response.send("PLEASE ENTER EMAIL AND PASSWORD")
+        response.end()
+    }
